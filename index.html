@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Chickens - Dynamic Odyssey Breeding Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg-dark: #1a1a2e;
+    --bg-card: #16213e;
+    --bg-section: #0f3460;
+    --accent-warm: #e94560;
+    --accent-gold: #f5c518;
+    --accent-green: #4ecca3;
+    --accent-blue: #53a8e2;
+    --text-main: #eee;
+    --text-muted: #aab;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse at 30% 50%, rgba(233,69,96,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 50%, rgba(78,204,163,0.08) 0%, transparent 50%);
+    animation: heroGlow 8s ease-in-out infinite alternate;
+  }
+  @keyframes heroGlow {
+    0% { transform: translate(0,0); }
+    100% { transform: translate(-3%,2%); }
+  }
+  .hero h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    background: linear-gradient(135deg, var(--accent-gold), #ff9a56, var(--accent-warm));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    z-index: 1;
+    text-shadow: none;
+    filter: drop-shadow(0 2px 8px rgba(245,197,24,0.3));
+  }
+  .hero .subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--text-muted);
+    margin-top: 8px;
+    position: relative; z-index: 1;
+  }
+  .hero .subtitle span { color: var(--accent-green); font-weight: 700; }
+
+  /* ── FLOATING CHICKENS ── */
+  .float-chicken {
+    position: absolute;
+    z-index: 0;
+    opacity: 0.12;
+    font-size: 3rem;
+    animation: floaty 6s ease-in-out infinite;
+  }
+  .float-chicken:nth-child(2) { top:15%; left:8%; animation-delay:-1s; font-size:2.5rem; }
+  .float-chicken:nth-child(3) { top:25%; right:10%; animation-delay:-3s; font-size:3.5rem; }
+  .float-chicken:nth-child(4) { bottom:20%; left:15%; animation-delay:-2s; }
+  .float-chicken:nth-child(5) { bottom:10%; right:12%; animation-delay:-4s; font-size:2rem; }
+  @keyframes floaty {
+    0%,100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-18px) rotate(3deg); }
+  }
+
+  /* ── STATS BANNER ── */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 30px 20px;
+    background: linear-gradient(90deg, rgba(78,204,163,0.1), rgba(83,168,226,0.1));
+    border-top: 1px solid rgba(78,204,163,0.2);
+    border-bottom: 1px solid rgba(78,204,163,0.2);
+  }
+  .stat {
+    text-align: center;
+    min-width: 120px;
+  }
+  .stat .num {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.6rem;
+    color: var(--accent-gold);
+    line-height: 1;
+  }
+  .stat .label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    text-align: center;
+    padding: 50px 20px 10px;
+    color: var(--accent-gold);
+  }
+  .section-desc {
+    text-align: center;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  /* ── HOW BREEDING WORKS ── */
+  .breed-explainer {
+    max-width: 900px;
+    margin: 0 auto 30px;
+    padding: 30px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .breed-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .breed-box .chick-icon {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  .breed-box .name { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+  .breed-symbol {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem;
+    color: var(--accent-warm);
+  }
+  .breed-result {
+    border: 2px dashed var(--accent-gold);
+    padding: 4px;
+    border-radius: 50%;
+  }
+
+  /* ── CHICKEN PIXEL ART (CSS) ── */
+  .chicken-svg {
+    width: 56px; height: 56px;
+  }
+
+  /* ── TIER SECTIONS ── */
+  .tier-section {
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    padding: 0 20px;
+  }
+  .tier-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 24px;
+    border-radius: 16px 16px 0 0;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
+  }
+  .tier-header .tier-badge {
+    background: rgba(0,0,0,0.3);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+  }
+  .tier-header .tier-info {
+    margin-left: auto;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.8;
+  }
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    padding: 20px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 0 0 16px 16px;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-top: none;
+  }
+
+  /* ── CHICKEN CARD ── */
+  .chicken-card {
+    background: var(--bg-card);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .chicken-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  }
+  .chicken-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    border-radius: 14px 0 0 14px;
+  }
+  .card-icon {
+    width: 54px; height: 54px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .card-icon svg { width: 40px; height: 40px; }
+  .card-body { flex: 1; min-width: 0; }
+  .card-body h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  .card-resource {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .card-resource .mod-tag {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .mod-mi { background: rgba(78,204,163,0.2); color: #4ecca3; }
+  .mod-powah { background: rgba(255,102,0,0.2); color: #ff8844; }
+  .mod-ae2 { background: rgba(96,48,160,0.2); color: #b088ee; }
+  .mod-mc { background: rgba(83,168,226,0.2); color: #53a8e2; }
+  .mod-crop { background: rgba(139,195,74,0.2); color: #8bc34a; }
+
+  .card-parents {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+  }
+  .card-parents .parent-name {
+    background: rgba(255,255,255,0.07);
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .card-parents .heart { color: var(--accent-warm); font-size: 0.65rem; }
+  .speed-dots {
+    display: flex;
+    gap: 3px;
+    margin-top: 6px;
+  }
+  .speed-dots .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+  }
+  .speed-dots .dot.active { background: var(--accent-green); }
+
+  /* ── CATEGORY LEGEND ── */
+  .categories {
+    max-width: 900px;
+    margin: 0 auto 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 0 20px;
+  }
+  .cat-card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .cat-card .cat-icon { font-size: 2.2rem; margin-bottom: 8px; }
+  .cat-card h4 { font-size: 1rem; font-weight: 800; margin-bottom: 4px; }
+  .cat-card p { font-size: 0.82rem; color: var(--text-muted); }
+
+  /* ── SPEED LEGEND ── */
+  .speed-legend {
+    max-width: 700px;
+    margin: 0 auto 50px;
+    padding: 24px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .speed-legend h4 {
+    text-align: center;
+    font-family: 'Fredoka One', cursive;
+    color: var(--accent-green);
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+  }
+  .speed-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+  }
+  .speed-row .dots {
+    display: flex; gap: 3px;
+  }
+  .speed-row .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+  }
+  .speed-row .dot.on { background: var(--accent-green); }
+  .speed-row .desc { font-size: 0.85rem; color: var(--text-muted); }
+  .speed-row .coeff { font-weight: 700; color: var(--text-main); min-width: 32px; }
+
+  /* ── BREEDING TREE ── */
+  .tree-section {
+    max-width: 1100px;
+    margin: 0 auto 50px;
+    padding: 0 20px;
+  }
+  .tree-container {
+    background: rgba(255,255,255,0.02);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 30px 20px;
+    overflow-x: auto;
+  }
+  .tree-path {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 0;
+    flex-wrap: wrap;
+  }
+  .tree-node {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .tree-node .mini-chick {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+  }
+  .tree-arrow { color: var(--accent-gold); font-weight: 700; font-size: 1.2rem; }
+  .tree-plus { color: var(--accent-warm); font-weight: 700; }
+  .tree-label {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  footer a { color: var(--accent-green); text-decoration: none; }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    max-width: 600px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
+    color: var(--text-muted);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--accent-warm);
+    color: #fff;
+    border-color: var(--accent-warm);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .tier-grid { grid-template-columns: 1fr; }
+    .breed-explainer { flex-direction: column; gap: 10px; }
+    .stats-bar { gap: 16px; }
+  }
+
+  /* ── SEARCH ── */
+  .search-box {
+    max-width: 400px;
+    margin: 0 auto 20px;
+    padding: 0 20px;
+    position: relative;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 12px 20px 12px 44px;
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: var(--text-main);
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-box input:focus { border-color: var(--accent-green); }
+  .search-box input::placeholder { color: var(--text-muted); }
+  .search-box .search-icon {
+    position: absolute;
+    left: 36px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="float-chicken">&#x1F414;</div>
+  <div class="float-chicken">&#x1F423;</div>
+  <div class="float-chicken">&#x1F425;</div>
+  <div class="float-chicken">&#x1F414;</div>
+  <div class="float-chicken">&#x1F423;</div>
+  <h1>Modern Chickens</h1>
+  <p class="subtitle">The Complete Breeding Guide for <span>Dynamic Odyssey</span></p>
+</section>
+
+<!-- ═══ STATS ═══ -->
+<div class="stats-bar">
+  <div class="stat"><div class="num">61</div><div class="label">Total Breeds</div></div>
+  <div class="stat"><div class="num">6</div><div class="label">Tiers</div></div>
+  <div class="stat"><div class="num">5</div><div class="label">Mod Sources</div></div>
+  <div class="stat"><div class="num">48</div><div class="label">Custom Breeds</div></div>
+  <div class="stat"><div class="num">13</div><div class="label">Base Chickens</div></div>
+</div>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<h2 class="section-title">How Breeding Works</h2>
+<p class="section-desc">
+  Place two parent chickens near each other. They'll produce a baby of the new breed!
+  Higher-tier chickens require breeding through multiple generations. Each chicken lays
+  resources as eggs and drops them on death.
+</p>
+<div class="breed-explainer">
+  <div class="breed-box">
+    <div class="chick-icon" style="background:linear-gradient(135deg,#D4A03C,#C0912A)">
+      <svg viewBox="0 0 64 64" class="chicken-svg"><g fill="#fff"><ellipse cx="32" cy="38" rx="18" ry="16"/><circle cx="32" cy="20" r="12"/><polygon points="26,18 20,20 26,22" fill="#e94560"/><circle cx="29" cy="17" r="2" fill="#333"/><polygon points="30,10 32,4 34,10" fill="#e94560"/><rect x="25" y="52" width="4" height="8" rx="1" fill="#f5c518"/><rect x="35" y="52" width="4" height="8" rx="1" fill="#f5c518"/></g></svg>
+    </div>
+    <span class="name">Iron Chicken</span>
+  </div>
+  <span class="breed-symbol">+</span>
+  <div class="breed-box">
+    <div class="chick-icon" style="background:linear-gradient(135deg,#E87040,#D06030)">
+      <svg viewBox="0 0 64 64" class="chicken-svg"><g fill="#fff"><ellipse cx="32" cy="38" rx="18" ry="16"/><circle cx="32" cy="20" r="12"/><polygon points="26,18 20,20 26,22" fill="#e94560"/><circle cx="29" cy="17" r="2" fill="#333"/><polygon points="30,10 32,4 34,10" fill="#e94560"/><rect x="25" y="52" width="4" height="8" rx="1" fill="#f5c518"/><rect x="35" y="52" width="4" height="8" rx="1" fill="#f5c518"/></g></svg>
+    </div>
+    <span class="name">Copper Chicken</span>
+  </div>
+  <span class="breed-symbol">=</span>
+  <div class="breed-box">
+    <div class="breed-result">
+      <div class="chick-icon" style="background:linear-gradient(135deg,#D0D0D0,#B0B0B0)">
+        <svg viewBox="0 0 64 64" class="chicken-svg"><g fill="#fff"><ellipse cx="32" cy="38" rx="18" ry="16"/><circle cx="32" cy="20" r="12"/><polygon points="26,18 20,20 26,22" fill="#e94560"/><circle cx="29" cy="17" r="2" fill="#333"/><polygon points="30,10 32,4 34,10" fill="#e94560"/><rect x="25" y="52" width="4" height="8" rx="1" fill="#f5c518"/><rect x="35" y="52" width="4" height="8" rx="1" fill="#f5c518"/></g></svg>
+      </div>
+    </div>
+    <span class="name">Tin Chicken &#x2728;</span>
+  </div>
+</div>
+
+<!-- ═══ RESOURCE CATEGORIES ═══ -->
+<h2 class="section-title">Resource Categories</h2>
+<p class="section-desc">Chickens produce resources from five different mods in Dynamic Odyssey.</p>
+<div class="categories">
+  <div class="cat-card">
+    <div class="cat-icon">&#x2699;&#xFE0F;</div>
+    <h4>Modern Industrialization</h4>
+    <p>38 chickens &mdash; Tiny dusts for metals, alloys, and nuclear fuels</p>
+  </div>
+  <div class="cat-card">
+    <div class="cat-icon">&#x26A1;</div>
+    <h4>Powah</h4>
+    <p>5 chickens &mdash; Crystals, energized steel, and dry ice for energy</p>
+  </div>
+  <div class="cat-card">
+    <div class="cat-icon">&#x1F48E;</div>
+    <h4>Applied Energistics 2</h4>
+    <p>2 chickens &mdash; Certus quartz and fluix dust for ME systems</p>
+  </div>
+  <div class="cat-card">
+    <div class="cat-icon">&#x1F331;</div>
+    <h4>Croptopia</h4>
+    <p>1 chicken &mdash; Salt for cooking and crafting</p>
+  </div>
+  <div class="cat-card">
+    <div class="cat-icon">&#x2B1B;</div>
+    <h4>Vanilla Minecraft</h4>
+    <p>1 chicken &mdash; Ancient Debris for Netherite</p>
+  </div>
+</div>
+
+<!-- ═══ SPEED LEGEND ═══ -->
+<div class="speed-legend">
+  <h4>Egg Production Speed</h4>
+  <div class="speed-row">
+    <span class="coeff">1.0</span>
+    <div class="dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+    <span class="desc">Fastest &mdash; Basic Tier 1 resources</span>
+  </div>
+  <div class="speed-row">
+    <span class="coeff">0.8</span>
+    <div class="dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
+    <span class="desc">Fast &mdash; Common mid-game materials</span>
+  </div>
+  <div class="speed-row">
+    <span class="coeff">0.6</span>
+    <div class="dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+    <span class="desc">Moderate &mdash; Advanced alloys &amp; materials</span>
+  </div>
+  <div class="speed-row">
+    <span class="coeff">0.5</span>
+    <div class="dots"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <span class="desc">Slow &mdash; End-game nuclear resources</span>
+  </div>
+  <div class="speed-row">
+    <span class="coeff">0.4</span>
+    <div class="dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <span class="desc">Slowest &mdash; Ancient Debris (ultra rare!)</span>
+  </div>
+</div>
+
+<!-- ═══ EXAMPLE BREEDING CHAINS ═══ -->
+<h2 class="section-title">Featured Breeding Chains</h2>
+<p class="section-desc">Follow these paths from base chickens to end-game nuclear resources!</p>
+
+<div class="tree-section">
+  <div class="tree-container">
+    <div class="tree-label">&#x2622;&#xFE0F; Path to HE MOX Fuel (5 breeding steps)</div>
+    <div class="tree-path">
+      <div class="tree-node" style="background:rgba(92,92,92,0.3)"><span class="mini-chick" style="background:#5C5C5C">&#x1F414;</span> Iron</div>
+      <span class="tree-plus">+</span>
+      <div class="tree-node" style="background:rgba(92,92,92,0.3)"><span class="mini-chick" style="background:#5C5C5C">&#x1F414;</span> Flint</div>
+      <span class="tree-arrow">&rarr;</span>
+      <div class="tree-node" style="background:rgba(92,92,92,0.3)"><span class="mini-chick" style="background:#5C5C5C">&#x1F425;</span> Lead</div>
+    </div>
+    <div class="tree-path">
+      <div class="tree-node" style="background:rgba(92,92,92,0.3)"><span class="mini-chick" style="background:#5C5C5C">&#x1F414;</span> Lead</div>
+      <span class="tree-plus">+</span>
+      <div class="tree-node" style="background:rgba(255,215,0,0.2)"><span class="mini-chick" style="background:#FFD700">&#x1F414;</span> Gold</div>
+      <span class="tree-arrow">&rarr;</span>
+      <div class="tree-node" style="background:rgba(77,115,38,0.3)"><span class="mini-chick" style="background:#4D7326">&#x1F425;</span> Uranium</div>
+    </div>
+    <div class="tree-path">
+      <div class="tree-node" style="background:rgba(77,115,38,0.3)"><span class="mini-chick" style="background:#4D7326">&#x1F414;</span> Uranium</div>
+      <span class="tree-plus">+</span>
+      <div class="tree-node" style="background:rgba(0,200,255,0.15)"><span class="mini-chick" style="background:#5CF">&#x1F414;</span> Diamond</div>
+      <span class="tree-arrow">&rarr;</span>
+      <div class="tree-node" style="background:rgba(61,99,32,0.3)"><span class="mini-chick" style="background:#3D6320">&#x1F425;</span> U-235</div>
+    </div>
+    <div class="tree-path">
+      <div class="tree-node" style="background:rgba(77,115,38,0.3)"><span class="mini-chick" style="background:#4D7326">&#x1F414;</span> Uranium</div>
+      <span class="tree-plus">+</span>
+      <div class="tree-node" style="background:rgba(92,92,92,0.3)"><span class="mini-chick" style="background:#5C5C5C">&#x1F414;</span> Lead</div>
+      <span class="tree-arrow">&rarr;</span>
+      <div class="tree-node" style="background:rgba(93,131,48,0.3)"><span class="mini-chick" style="background:#5D8330">&#x1F425;</span> U-238</div>
+    </div>
+    <div class="tree-path">
+      <div class="tree-node" style="background:rgba(61,99,32,0.3)"><span class="mini-chick" style="background:#3D6320">&#x1F414;</span> U-235</div>
+      <span class="tree-plus">+</span>
+      <div class="tree-node" style="background:rgba(93,131,48,0.3)"><span class="mini-chick" style="background:#5D8330">&#x1F414;</span> U-238</div>
+      <span class="tree-arrow">&rarr;</span>
+      <div class="tree-node" style="background:rgba(93,78,109,0.3)"><span class="mini-chick" style="background:#5D4E6D">&#x1F425;</span> Plutonium</div>
+    </div>
+    <div class="tree-path">
+      <div class="tree-node" style="background:rgba(93,78,109,0.4);border:1px solid rgba(233,69,96,0.4)"><span class="mini-chick" style="background:#5D4E6D">&#x1F414;</span> Plutonium</div>
+      <span class="tree-plus">+</span>
+      <div class="tree-node" style="background:rgba(61,99,32,0.4);border:1px solid rgba(233,69,96,0.4)"><span class="mini-chick" style="background:#3D6320">&#x1F414;</span> U-235</div>
+      <span class="tree-arrow">&rarr;</span>
+      <div class="tree-node" style="background:linear-gradient(135deg,rgba(125,94,77,0.5),rgba(233,69,96,0.2));border:2px solid var(--accent-gold)"><span class="mini-chick" style="background:#7D5E4D">&#x2B50;</span> HE MOX</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SEARCH + FILTER ═══ -->
+<h2 class="section-title">All 48 Custom Breeds</h2>
+<p class="section-desc">Browse every custom chicken organized by tier. Search or filter by mod!</p>
+
+<div class="search-box">
+  <span class="search-icon">&#x1F50D;</span>
+  <input type="text" id="searchInput" placeholder="Search chickens..." oninput="filterChickens()">
+</div>
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+  <button class="filter-btn" onclick="setFilter('mi', this)">Modern Industrialization</button>
+  <button class="filter-btn" onclick="setFilter('powah', this)">Powah</button>
+  <button class="filter-btn" onclick="setFilter('ae2', this)">AE2</button>
+  <button class="filter-btn" onclick="setFilter('other', this)">Other</button>
+</div>
+
+<!-- ═══ TIER 0: BASE ═══ -->
+<div class="tier-section" data-tier="0">
+  <div class="tier-header" style="background:linear-gradient(90deg,rgba(170,170,187,0.15),rgba(170,170,187,0.05));">
+    <span class="tier-badge">TIER 0</span>
+    Base Chickens
+    <span class="tier-info">13 breeds &bull; Found naturally or crafted</span>
+  </div>
+  <div class="tier-grid">
+    <div class="chicken-card" data-name="iron chicken" data-mod="base" style="--card-color:#D4A03C">
+      <div class="card-icon" style="background:linear-gradient(135deg,#D4A03C,#C0912A)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Iron Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Iron Ingot</div></div>
+    </div>
+    <div class="chicken-card" data-name="copper chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#E87040,#D06030)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Copper Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Copper Ingot</div></div>
+    </div>
+    <div class="chicken-card" data-name="coal chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#404040,#2a2a2a)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Coal Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Coal</div></div>
+    </div>
+    <div class="chicken-card" data-name="gold chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#FFD700,#DAA520)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Gold Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Gold Ingot</div></div>
+    </div>
+    <div class="chicken-card" data-name="diamond chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#5CF,#2AB)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Diamond Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Diamond</div></div>
+    </div>
+    <div class="chicken-card" data-name="emerald chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#50C878,#3DA060)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Emerald Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Emerald</div></div>
+    </div>
+    <div class="chicken-card" data-name="redstone chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#CC2020,#991010)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Redstone Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Redstone</div></div>
+    </div>
+    <div class="chicken-card" data-name="lapis chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#2546BD,#1A3399)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Lapis Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Lapis Lazuli</div></div>
+    </div>
+    <div class="chicken-card" data-name="quartz chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#E8E0D0,#C8C0B0)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Quartz Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Quartz</div></div>
+    </div>
+    <div class="chicken-card" data-name="glowstone chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#E0C040,#C0A020)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Glowstone Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Glowstone Dust</div></div>
+    </div>
+    <div class="chicken-card" data-name="flint chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#555,#333)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Flint Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Flint</div></div>
+    </div>
+    <div class="chicken-card" data-name="sand chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#E0D4A0,#C8B888)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Sand Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Sand</div></div>
+    </div>
+    <div class="chicken-card" data-name="snowball chicken" data-mod="base">
+      <div class="card-icon" style="background:linear-gradient(135deg,#E8F0FF,#C8D8F0)"><svg viewBox="0 0 40 40"><g fill="#fff" opacity="0.9"><ellipse cx="20" cy="24" rx="12" ry="10"/><circle cx="20" cy="12" r="8"/><circle cx="18" cy="11" r="1.5" fill="#333"/><polygon points="15,12 11,13 15,14" fill="#e94560"/></g></svg></div>
+      <div class="card-body"><h3>Snowball Chicken</h3><div class="card-resource"><span class="mod-tag mod-mc">Base</span>Snowball</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TIER 1 ═══ -->
+<div class="tier-section" data-tier="1">
+  <div class="tier-header" style="background:linear-gradient(90deg,rgba(78,204,163,0.15),rgba(78,204,163,0.03));">
+    <span class="tier-badge">TIER 1</span>
+    First Generation
+    <span class="tier-info">14 breeds &bull; Speed: 0.8&ndash;1.0</span>
+  </div>
+  <div class="tier-grid" id="tier1-grid"></div>
+</div>
+
+<!-- ═══ TIER 2 ═══ -->
+<div class="tier-section" data-tier="2">
+  <div class="tier-header" style="background:linear-gradient(90deg,rgba(83,168,226,0.15),rgba(83,168,226,0.03));">
+    <span class="tier-badge">TIER 2</span>
+    Second Generation
+    <span class="tier-info">18 breeds &bull; Speed: 0.6&ndash;0.8</span>
+  </div>
+  <div class="tier-grid" id="tier2-grid"></div>
+</div>
+
+<!-- ═══ TIER 3 ═══ -->
+<div class="tier-section" data-tier="3">
+  <div class="tier-header" style="background:linear-gradient(90deg,rgba(245,197,24,0.15),rgba(245,197,24,0.03));">
+    <span class="tier-badge">TIER 3</span>
+    Third Generation
+    <span class="tier-info">9 breeds &bull; Speed: 0.5&ndash;0.8</span>
+  </div>
+  <div class="tier-grid" id="tier3-grid"></div>
+</div>
+
+<!-- ═══ TIER 4 ═══ -->
+<div class="tier-section" data-tier="4">
+  <div class="tier-header" style="background:linear-gradient(90deg,rgba(233,69,96,0.15),rgba(233,69,96,0.03));">
+    <span class="tier-badge">TIER 4</span>
+    Fourth Generation
+    <span class="tier-info">5 breeds &bull; Speed: 0.5&ndash;0.6</span>
+  </div>
+  <div class="tier-grid" id="tier4-grid"></div>
+</div>
+
+<!-- ═══ TIER 5 ═══ -->
+<div class="tier-section" data-tier="5">
+  <div class="tier-header" style="background:linear-gradient(90deg,rgba(200,80,40,0.2),rgba(200,80,40,0.03));border:1px solid rgba(233,69,96,0.2);">
+    <span class="tier-badge" style="background:rgba(233,69,96,0.3)">TIER 5</span>
+    End-Game Nuclear
+    <span class="tier-info">2 breeds &bull; Speed: 0.5</span>
+  </div>
+  <div class="tier-grid" id="tier5-grid"></div>
+</div>
+
+<footer>
+  <p>Modern Chickens &mdash; Dynamic Odyssey v2.11.5 &bull; Minecraft 1.21.1 + NeoForge</p>
+  <p style="margin-top:6px">Chickens replace Botany Pots ore-growing for automated resource production</p>
+</footer>
+
+<script>
+// ── DATA ──
+const baseChickens = {
+  IronChicken: "Iron", copperchicken: "Copper", CoalChicken: "Coal",
+  GoldChicken: "Gold", DiamondChicken: "Diamond", EmeraldChicken: "Emerald",
+  RedstoneChicken: "Redstone", LapisChicken: "Lapis", QuartzChicken: "Quartz",
+  GlowstoneChicken: "Glowstone", FlintChicken: "Flint", SandChicken: "Sand",
+  SnowballChicken: "Snowball"
+};
+
+const chickens = [
+  // TIER 1 - base + base parents
+  {n:"Tin",bg:"#B0B0B0",fg:"#D0D0D0",p:["Iron","Copper"],res:"Tin Tiny Dust",mod:"mi",spd:1.0,tier:1},
+  {n:"Lead",bg:"#5C5C5C",fg:"#8A8A8A",p:["Iron","Flint"],res:"Lead Tiny Dust",mod:"mi",spd:1.0,tier:1},
+  {n:"Nickel",bg:"#A0A080",fg:"#C0C0A0",p:["Iron","Quartz"],res:"Nickel Tiny Dust",mod:"mi",spd:1.0,tier:1},
+  {n:"Steel",bg:"#808080",fg:"#A0A0A0",p:["Iron","Coal"],res:"Steel Tiny Dust",mod:"mi",spd:1.0,tier:1},
+  {n:"Salt",bg:"#FFFFFF",fg:"#E8E8E0",p:["Glowstone","Quartz"],res:"Salt",mod:"crop",spd:1.0,tier:1},
+  {n:"Bronze",bg:"#CD7F32",fg:"#E8A862",p:["Copper","Tin"],res:"Bronze Tiny Dust",mod:"mi",spd:1.0,tier:1},
+  {n:"Sulfur",bg:"#C8C820",fg:"#E0E060",p:["Coal","Redstone"],res:"Sulfur Tiny Dust",mod:"mi",spd:1.0,tier:1},
+  {n:"Lignite Coal",bg:"#605030",fg:"#806848",p:["Coal","Sand"],res:"Lignite Coal Tiny Dust",mod:"mi",spd:1.0,tier:1},
+  {n:"Silicon",bg:"#4A4A5A",fg:"#6A6A8A",p:["Quartz","Redstone"],res:"Silicon Tiny Dust",mod:"mi",spd:1.0,tier:1},
+  {n:"Blazing Crystal",bg:"#FF6600",fg:"#FFAA44",p:["Gold","Glowstone"],res:"Blazing Crystal",mod:"powah",spd:0.8,tier:1},
+  {n:"Dry Ice",bg:"#A0D0FF",fg:"#D0E8FF",p:["Snowball","Lapis"],res:"Dry Ice",mod:"powah",spd:0.8,tier:1},
+  {n:"Niotic Crystal",bg:"#6666FF",fg:"#AAAAFF",p:["Diamond","Lapis"],res:"Niotic Crystal",mod:"powah",spd:0.6,tier:1},
+  {n:"Spirited Crystal",bg:"#66FF66",fg:"#AAFFAA",p:["Emerald","Diamond"],res:"Spirited Crystal",mod:"powah",spd:0.6,tier:1},
+  {n:"Certus Quartz Dust",bg:"#C0C8D0",fg:"#E0E8F0",p:["Quartz","Glowstone"],res:"Certus Quartz Dust",mod:"ae2",spd:0.8,tier:1},
+
+  // TIER 2 - one parent is tier 1
+  {n:"Antimony",bg:"#6A6A70",fg:"#9A9AA0",p:["Lead","Coal"],res:"Antimony Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Aluminum",bg:"#C0C0C0",fg:"#E0E0E0",p:["Tin","Nickel"],res:"Aluminum Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Electrum",bg:"#FFD700",fg:"#FFF0A0",p:["Gold","Nickel"],res:"Electrum Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Invar",bg:"#909080",fg:"#B0B0A0",p:["Iron","Nickel"],res:"Invar Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Manganese",bg:"#5A5060",fg:"#7A7080",p:["Iron","Steel"],res:"Manganese Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Chromium",bg:"#808880",fg:"#A0A8A0",p:["Steel","Nickel"],res:"Chromium Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Cupronickel",bg:"#B89070",fg:"#D0A888",p:["Copper","Nickel"],res:"Cupronickel Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Soldering Alloy",bg:"#888890",fg:"#A8A8B0",p:["Tin","Lead"],res:"Soldering Alloy Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Monazite",bg:"#705030",fg:"#906848",p:["Lead","Nickel"],res:"Monazite Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Platinum",bg:"#E5E4E2",fg:"#F5F5F0",p:["Gold","Nickel"],res:"Platinum Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Uranium",bg:"#4D7326",fg:"#6B9D3A",p:["Lead","Gold"],res:"Uranium Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Energized Steel",bg:"#C0A020",fg:"#E0C040",p:["Steel","Gold"],res:"Energized Steel",mod:"powah",spd:0.8,tier:2},
+  {n:"Sodium",bg:"#D0D0D0",fg:"#F0F0F0",p:["Salt","Redstone"],res:"Sodium Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Fluix Dust",bg:"#6030A0",fg:"#9060D0",p:["Certus Quartz Dust","Redstone"],res:"Fluix Dust",mod:"ae2",spd:0.8,tier:2},
+  {n:"Salt Dust",bg:"#E8E8D0",fg:"#F0F0E0",p:["Salt","Coal"],res:"Salt Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Salt Tiny Dust",bg:"#E0E0C8",fg:"#F0F0E0",p:["Salt","Sand"],res:"Salt Tiny Dust",mod:"mi",spd:0.8,tier:2},
+  {n:"Cadmium",bg:"#606060",fg:"#888888",p:["Lead","Tin"],res:"Cadmium Tiny Dust",mod:"mi",spd:0.6,tier:2},
+  {n:"Bauxite",bg:"#A05030",fg:"#C07050",p:["Aluminum","Iron"],res:"Bauxite Tiny Dust",mod:"mi",spd:0.8,tier:2},
+
+  // TIER 3 - deeper breeding
+  {n:"Stainless Steel",bg:"#E0E0E0",fg:"#F0F0F0",p:["Steel","Chromium"],res:"Stainless Steel Tiny Dust",mod:"mi",spd:0.6,tier:3},
+  {n:"Titanium",bg:"#878681",fg:"#A8A8A0",p:["Aluminum","Chromium"],res:"Titanium Tiny Dust",mod:"mi",spd:0.6,tier:3},
+  {n:"Kanthal",bg:"#909890",fg:"#B0B8B0",p:["Chromium","Aluminum"],res:"Kanthal Tiny Dust",mod:"mi",spd:0.6,tier:3},
+  {n:"Battery Alloy",bg:"#606870",fg:"#808890",p:["Lead","Antimony"],res:"Battery Alloy Tiny Dust",mod:"mi",spd:0.6,tier:3},
+  {n:"Yttrium",bg:"#808090",fg:"#A0A0B0",p:["Monazite","Quartz"],res:"Yttrium Tiny Dust",mod:"mi",spd:0.8,tier:3},
+  {n:"Beryllium",bg:"#80A080",fg:"#A0C0A0",p:["Emerald","Aluminum"],res:"Beryllium Tiny Dust",mod:"mi",spd:0.6,tier:3},
+  {n:"Uranium-235",bg:"#3D6320",fg:"#5B8D2A",p:["Uranium","Diamond"],res:"Uranium-235 Tiny Dust",mod:"mi",spd:0.5,tier:3},
+  {n:"Uranium-238",bg:"#5D8330",fg:"#7BA34A",p:["Uranium","Lead"],res:"Uranium-238 Tiny Dust",mod:"mi",spd:0.5,tier:3},
+  {n:"Ancient Debris",bg:"#5C3A1E",fg:"#7C5A3E",p:["Diamond","Emerald"],res:"Ancient Debris",mod:"mc",spd:0.4,tier:3},
+
+  // TIER 4
+  {n:"Iridium",bg:"#E0E0F0",fg:"#F0F0FF",p:["Platinum","Titanium"],res:"Iridium Tiny Dust",mod:"mi",spd:0.5,tier:4},
+  {n:"Tungsten",bg:"#4A4A4A",fg:"#707070",p:["Steel","Titanium"],res:"Tungsten Tiny Dust",mod:"mi",spd:0.6,tier:4},
+  {n:"Neodymium",bg:"#708088",fg:"#90A0A8",p:["Monazite","Yttrium"],res:"Neodymium Tiny Dust",mod:"mi",spd:0.6,tier:4},
+  {n:"Plutonium",bg:"#5D4E6D",fg:"#7D6E8D",p:["Uranium-235","Uranium-238"],res:"Plutonium Tiny Dust",mod:"mi",spd:0.5,tier:4},
+  {n:"LE Uranium",bg:"#4D6336",fg:"#6B8D4A",p:["Uranium","Uranium-238"],res:"LE Uranium Tiny Dust",mod:"mi",spd:0.5,tier:4},
+
+  // TIER 5
+  {n:"LE MOX",bg:"#6D5E5D",fg:"#8D7E7D",p:["Plutonium","Uranium-238"],res:"LE MOX Tiny Dust",mod:"mi",spd:0.5,tier:5},
+  {n:"HE MOX",bg:"#7D5E4D",fg:"#9D7E6D",p:["Plutonium","Uranium-235"],res:"HE MOX Tiny Dust",mod:"mi",spd:0.5,tier:5},
+];
+
+const modLabels = {
+  mi: ['Modern Industrialization', 'mod-mi'],
+  powah: ['Powah', 'mod-powah'],
+  ae2: ['AE2', 'mod-ae2'],
+  mc: ['Minecraft', 'mod-mc'],
+  crop: ['Croptopia', 'mod-crop'],
+};
+
+function chickenSVG(bg, fg) {
+  return `<svg viewBox="0 0 40 40"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${fg}"/><stop offset="100%" stop-color="${bg}"/></linearGradient></defs><g><ellipse cx="20" cy="25" rx="12" ry="10" fill="${bg}" opacity="0.85"/><ellipse cx="20" cy="25" rx="10" ry="8" fill="${fg}" opacity="0.3"/><circle cx="20" cy="13" r="8" fill="${bg}"/><circle cx="20" cy="13" r="6" fill="${fg}" opacity="0.2"/><circle cx="18" cy="11.5" r="1.8" fill="#1a1a2e"/><circle cx="17.4" cy="11" r="0.6" fill="#fff"/><polygon points="14,13 10,14 14,15" fill="#e94560"/><polygon points="19,5 20,2 21,5 23,5 21,7 22,10 20,8 18,10 19,7 17,5" fill="#e94560"/><rect x="15" y="33" width="3.5" height="6" rx="1.5" fill="#f5c518"/><rect x="21.5" y="33" width="3.5" height="6" rx="1.5" fill="#f5c518"/><ellipse cx="31" cy="22" rx="4" ry="7" fill="${bg}" opacity="0.6" transform="rotate(20 31 22)"/></g></svg>`;
+}
+
+function speedDots(spd) {
+  const filled = spd >= 1.0 ? 5 : spd >= 0.8 ? 4 : spd >= 0.6 ? 3 : spd >= 0.5 ? 2 : 1;
+  let html = '<div class="speed-dots" title="Lay speed: '+spd+'">';
+  for(let i=0;i<5;i++) html += `<div class="dot${i<filled?' active':''}"></div>`;
+  return html + '</div>';
+}
+
+function makeCard(c) {
+  const [modName, modClass] = modLabels[c.mod];
+  return `<div class="chicken-card" data-name="${c.n.toLowerCase()} chicken" data-mod="${c.mod}" style="--card-color:${c.bg}">
+    <div class="card-icon" style="background:linear-gradient(135deg,${c.bg},${c.fg})">${chickenSVG(c.bg, c.fg)}</div>
+    <div class="card-body">
+      <h3>${c.n} Chicken</h3>
+      <div class="card-resource"><span class="mod-tag ${modClass}">${modName}</span>${c.res}</div>
+      <div class="card-parents">
+        <span class="parent-name">${c.p[0]}</span>
+        <span class="heart">&hearts;</span>
+        <span class="parent-name">${c.p[1]}</span>
+      </div>
+      ${speedDots(c.spd)}
+    </div>
+  </div>`;
+}
+
+// Render tier grids
+for (let t = 1; t <= 5; t++) {
+  const grid = document.getElementById('tier' + t + '-grid');
+  if (grid) {
+    grid.innerHTML = chickens.filter(c => c.tier === t).map(makeCard).join('');
+  }
+}
+
+// Add color accents to cards
+document.querySelectorAll('.chicken-card').forEach(card => {
+  const color = card.style.getPropertyValue('--card-color');
+  if (color) card.style.setProperty('border-left', `4px solid ${color}`);
+});
+
+// ── FILTERING ──
+let currentFilter = 'all';
+
+function setFilter(mod, btn) {
+  currentFilter = mod;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterChickens();
+}
+
+function filterChickens() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.chicken-card').forEach(card => {
+    const name = card.dataset.name || '';
+    const mod = card.dataset.mod || '';
+    const matchText = !q || name.includes(q);
+    const matchMod = currentFilter === 'all' || mod === currentFilter ||
+      (currentFilter === 'other' && (mod === 'mc' || mod === 'crop' || mod === 'base'));
+    card.style.display = (matchText && matchMod) ? '' : 'none';
+  });
+  // Show/hide tier sections if all cards hidden
+  document.querySelectorAll('.tier-section').forEach(sec => {
+    const visible = sec.querySelectorAll('.chicken-card:not([style*="display: none"])');
+    sec.style.display = visible.length ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>
